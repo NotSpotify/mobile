@@ -5,8 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notspotify/common/widgets/button/basic_app_button.dart';
 import 'package:notspotify/core/config/assets/app_images.dart';
 import 'package:notspotify/core/config/assets/app_vectors.dart';
+import 'package:notspotify/presentation/auth/pages/sign_in.dart';
 import 'package:notspotify/presentation/choose_mode/bloc/theme_cubit.dart';
-import 'package:notspotify/presentation/home/pages/home.dart';
+import 'package:notspotify/presentation/auth/pages/home.dart';
 
 class ChooseModePage extends StatelessWidget {
   const ChooseModePage({super.key});
@@ -66,7 +67,9 @@ class ChooseModePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      MaterialPageRoute(
+                        builder: (context) => const SignInPage(),
+                      ),
                     );
                   },
                   height: 70,
