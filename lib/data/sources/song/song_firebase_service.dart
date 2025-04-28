@@ -7,6 +7,8 @@ abstract class SongFirebaseService {
 }
 
 class SongFirebaseServiceImpl extends SongFirebaseService {
+  
+
   @override
   Future<void> addSongToFavourite(String spotifyId) async {
     // Implementation for adding a song to favourites in Firebase
