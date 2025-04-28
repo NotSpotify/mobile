@@ -7,4 +7,6 @@ class AppVectors {
   static const sun = "${basePath}Sun$format";
   static const google = "${basePath}google$format";
   static const apple = "${basePath}apple$format";
+  static const homeTopCard = '${basePath}top_card$format';
+  static const obito = "${basePath}obito$format";
 }

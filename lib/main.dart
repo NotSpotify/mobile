@@ -1,16 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:notspotify/core/config/theme/app_theme.dart';
+import 'package:notspotify/firebase_options.dart';
 import 'package:notspotify/presentation/choose_mode/bloc/theme_cubit.dart';
 import 'package:notspotify/presentation/splash/pages/splash.dart';
+import 'package:notspotify/service_locator.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<void> main() async {
-  // initialize hydrated bloc
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/.env");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //Initialize Supabase
+  await initDependencies();
+  // initialize hydrated bloc
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory:

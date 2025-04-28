@@ -6,4 +6,6 @@ class AppImages {
 
   static const String intro1 = "${basePath}intro1.jpg";
   static const String intro2 = "${basePath}intro2$formatJpg";
+  static const String obito = "${basePath}obito$formatPng";
+  static const String defaultImg = "${basePath}default$formatPng";
 }

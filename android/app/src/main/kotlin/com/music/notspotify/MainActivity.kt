@@ -1,4 +1,4 @@
-package com.example.notspotify
+package com.music.notspotify
 
 import io.flutter.embedding.android.FlutterActivity
 

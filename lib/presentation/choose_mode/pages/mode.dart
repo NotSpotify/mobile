@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,13 +8,15 @@ import 'package:notspotify/core/config/assets/app_images.dart';
 import 'package:notspotify/core/config/assets/app_vectors.dart';
 import 'package:notspotify/presentation/auth/pages/sign_in.dart';
 import 'package:notspotify/presentation/choose_mode/bloc/theme_cubit.dart';
-import 'package:notspotify/presentation/auth/pages/home.dart';
+import 'package:notspotify/presentation/home/pages/home.dart';
 
 class ChooseModePage extends StatelessWidget {
-  const ChooseModePage({super.key});
+  final _user = FirebaseAuth.instance.currentUser;
+  ChooseModePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    print("User: $_user");
     return Scaffold(
       body: Stack(
         children: [
@@ -68,9 +71,18 @@ class ChooseModePage extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SignInPage(),
+                        builder:
+                            (context) =>
+                                _user != null ? HomePage() : SignInPage(),
                       ),
                     );
+                  },
+                  height: 70,
+                ),
+                BasicAppButton(
+                  title: "Continue",
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
                   },
                   height: 70,
                 ),
