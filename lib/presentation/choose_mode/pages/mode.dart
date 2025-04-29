@@ -79,13 +79,6 @@ class ChooseModePage extends StatelessWidget {
                   },
                   height: 70,
                 ),
-                BasicAppButton(
-                  title: "Continue",
-                  onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                  },
-                  height: 70,
-                ),
               ],
             ),
           ),

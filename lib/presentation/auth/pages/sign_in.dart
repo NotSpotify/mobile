@@ -103,6 +103,7 @@ class _SignInPageState extends State<SignInPage> {
                   (l) => _showSnackbar(context, l.toString(), Colors.red),
                   (r) {
                     _showSnackbar(context, r.toString(), Colors.green);
+                    print('Navigating to HomePage with context: $context');
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (_) => HomePage()),
@@ -145,7 +146,15 @@ class _SignInPageState extends State<SignInPage> {
                     var result = await sl<SigninGoogleUseCase>().call();
                     result.fold(
                       (l) => _showSnackbar(context, l.toString(), Colors.red),
-                      (r) => _showSnackbar(context, r.toString(), Colors.green),
+                      (r) {
+                        _showSnackbar(context, r.toString(), Colors.green);
+                        print('Navigating to HomePage with context: $context');
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (_) => HomePage()),
+                          (route) => false,
+                        );
+                      },
                     );
                   },
                 ),

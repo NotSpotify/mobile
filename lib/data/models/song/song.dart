@@ -1,11 +1,12 @@
 import 'package:notspotify/core/config/assets/app_images.dart';
+import 'package:notspotify/domain/entities/song/song.dart';
 
 class SongModel {
   final String spotifyId;
   final String name;
   final String artist;
   final String img;
-  final bool preview;
+  final String preview;
   final num? duration;
 
   SongModel({
@@ -18,10 +19,23 @@ class SongModel {
   });
 
   SongModel.fromJson(Map<String, dynamic> json)
-    : spotifyId = json['spotifyId'],
-      name = json['name'],
-      artist = json['artist'],
+    : spotifyId = json['spotify_id'] ?? '',
+      name = json['name'] ?? '',
+      artist = json['artist'] ?? '',
       img = json['img'] ?? AppImages.defaultImg,
-      preview = json['preview'] ?? false,
+      preview = json['preview'] ?? '',
       duration = json['duration'] ?? 0.0;
+}
+
+extension SongModelX on SongModel {
+  SongEntity toEntity() {
+    return SongEntity(
+      spotifyId: spotifyId,
+      name: name,
+      artist: artist,
+      img: img,
+      preview: preview,
+      duration: duration,
+    );
+  }
 }

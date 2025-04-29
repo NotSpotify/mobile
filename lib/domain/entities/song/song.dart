@@ -1,11 +1,10 @@
-import 'package:notspotify/core/config/assets/app_images.dart';
 
 class SongEntity {
   final String spotifyId;
   final String name;
   final String artist;
   final String img;
-  final bool preview;
+  final String preview;
   final num? duration;
 
   SongEntity({

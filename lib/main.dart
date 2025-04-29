@@ -8,6 +8,8 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:notspotify/core/config/theme/app_theme.dart';
 import 'package:notspotify/firebase_options.dart';
 import 'package:notspotify/presentation/choose_mode/bloc/theme_cubit.dart';
+import 'package:notspotify/presentation/home/bloc/now_playing_cubit.dart';
+import 'package:notspotify/presentation/home/bloc/play_status.dart';
 import 'package:notspotify/presentation/splash/pages/splash.dart';
 import 'package:notspotify/service_locator.dart';
 import 'package:path_provider/path_provider.dart';
@@ -36,7 +38,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => ThemeCubit())],
+      providers: [
+        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => NowPlayingCubit()),
+        BlocProvider(create: (_) => PlayingStatusCubit()), // ✅ thêm dòng này
+      ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder:
             (context, ThemeMode themeMode) => MaterialApp(

@@ -27,7 +27,7 @@ abstract class AuthFirebaseService {
   //   Future<Either> deleteUserAccountWithEmail(String email);
 }
 
-class AuthSupabaseServiceImpl implements AuthFirebaseService {
+class AuthFirebaseServiceImpl implements AuthFirebaseService {
   @override
   Future<Either> signUpWithEmailAndPassword(CreateUserReq createUserReq) async {
     try {
@@ -39,6 +39,7 @@ class AuthSupabaseServiceImpl implements AuthFirebaseService {
       FirebaseFirestore.instance.collection('users').doc(data.user!.uid).set({
         'full_name': createUserReq.fullName,
         'email': createUserReq.email,
+        'image_url': createUserReq.imageUrl,
       });
 
       return const Right('Signin was Successful');
@@ -106,6 +107,7 @@ class AuthSupabaseServiceImpl implements AuthFirebaseService {
           .set({
             'full_name': FirebaseAuth.instance.currentUser?.displayName,
             'email': FirebaseAuth.instance.currentUser?.email,
+            'image_url': FirebaseAuth.instance.currentUser?.photoURL,
           });
       return Right('Signin was Successful');
     }
@@ -118,22 +120,39 @@ class AuthSupabaseServiceImpl implements AuthFirebaseService {
   }
 
   @override
-  Future<Either> getUser() async {
+  @override
+  Future<Either<String, UserEntity>> getUser() async {
     try {
-      FirebaseAuth auth = FirebaseAuth.instance;
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final auth = FirebaseAuth.instance;
+      final firestore = FirebaseFirestore.instance;
 
-      var user =
-          await firestore.collection('users').doc(auth.currentUser!.uid).get();
+      final currentUser = auth.currentUser;
+      if (currentUser == null) {
+        return const Left('User not logged in.');
+      }
 
-      UserModel userModel = UserModel.fromJson(user.data()!);
+      final userDoc =
+          await firestore.collection('users').doc(currentUser.uid).get();
+
+      if (!userDoc.exists) {
+        return const Left('User profile not found.');
+      }
+
+      final userData = userDoc.data();
+      if (userData == null) {
+        return const Left('User data is empty.');
+      }
+
+      final userModel = UserModel.fromJson(userData);
       userModel.imageUrl =
-          auth.currentUser?.photoURL ??
+          currentUser.photoURL ??
           'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg';
-      UserEntity userEntity = userModel.toEntity();
+
+      final userEntity = userModel.toEntity();
       return Right(userEntity);
     } catch (e) {
-      return Left(e.toString());
+      print('Error fetching user: $e');
+      return Left('Error: ${e.toString()}');
     }
   }
 }

@@ -55,6 +55,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     fullName: _fullName.text.trim(),
                     email: _email.text.trim(),
                     password: _password.text,
+                    imageUrl:
+                        'https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg',
                   ),
                 );
 
