@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notspotify/common/widgets/button/basic_app_button.dart';
 import 'package:notspotify/core/config/assets/app_images.dart';
 import 'package:notspotify/core/config/assets/app_vectors.dart';
-import 'package:notspotify/presentation/choose_mode/pages/mode.dart';
+import 'package:notspotify/core/routes/app_routes.dart';
 
 class GetStartedPages extends StatelessWidget {
   const GetStartedPages({super.key});
@@ -63,11 +63,9 @@ class GetStartedPages extends StatelessWidget {
                   BasicAppButton(
                     title: "Continue",
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacementNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => ChooseModePage(),
-                        ),
+                        AppRoutes.chooseMode,
                       );
                     },
                     height: 70,

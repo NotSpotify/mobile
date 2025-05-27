@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notspotify/common/helpers/is_dark_mode.dart';
+import 'package:notspotify/core/routes/app_routes.dart';
 
 class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
@@ -19,7 +20,12 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
               ? null
               : IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoutes
+                        .getStarted, // hoặc AppRoutes.home nếu bạn dùng route constant
+                    (route) => false,
+                  );
                 },
                 icon: Container(
                   height: 50,

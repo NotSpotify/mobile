@@ -11,6 +11,15 @@ import 'package:notspotify/presentation/home/bloc/song_cubit.dart';
 import 'package:notspotify/presentation/home/bloc/songs_state.dart';
 import 'package:notspotify/service_locator.dart';
 
+final genreIconMap = {
+  'Chill': Icons.spa,
+  'Dance': Icons.directions_run,
+  'Acoustic': Icons.music_note,
+  'Energetic': Icons.flash_on,
+  'Emotional': Icons.favorite,
+  'Experimental': Icons.auto_awesome,
+};
+
 class RecommendWidget extends StatelessWidget {
   final SongCubit cubit;
 
@@ -77,7 +86,6 @@ class RecommendWidget extends StatelessWidget {
                             color: Colors.white,
                           ),
                           onPressed: () async {
-                            print('spotifyId: ${song.spotifyId}');
                             await sl<AddRecentlyUseCase>().call(
                               params: {'song': song},
                             );
@@ -142,6 +150,26 @@ class RecommendWidget extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
+                const SizedBox(height: 5),
+                if (song.musicGenreLabel != null)
+                  Row(
+                    children: [
+                      Icon(
+                        genreIconMap[song.musicGenreLabel!] ?? Icons.music_note,
+                        size: 14,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        song.musicGenreLabel!,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),

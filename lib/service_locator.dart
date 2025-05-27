@@ -10,6 +10,7 @@ import 'package:notspotify/domain/usecases/auth/get_user.dart';
 import 'package:notspotify/domain/usecases/auth/signin.dart';
 import 'package:notspotify/domain/usecases/auth/signin_google.dart';
 import 'package:notspotify/domain/usecases/auth/signup.dart';
+import 'package:notspotify/domain/usecases/auth/update_genre_usecase.dart';
 import 'package:notspotify/domain/usecases/song/add_recently.dart';
 import 'package:notspotify/domain/usecases/song/add_to_favourite.dart';
 import 'package:notspotify/domain/usecases/song/get_random_song.dart';
@@ -35,4 +36,6 @@ Future<void> initDependencies() async {
   sl.registerSingleton<AddRecentlyUseCase>(AddRecentlyUseCase());
   sl.registerSingleton<RemoveFromFavouriteUseCase>(RemoveFromFavouriteUseCase());
   sl.registerSingleton<AddToFavouriteUseCase>(AddToFavouriteUseCase());
+  sl.registerSingleton<UpdateGenreUseCase>(UpdateGenreUseCase());
+
 }

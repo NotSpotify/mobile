@@ -11,7 +11,7 @@ abstract class AuthRepo {
   Future<Either> signInWithGoogle();
   Future<Either> signInWithApple();
   Future<Either> signOut();
-
+  Future<Either> updateGerne(String userId, List<String> gernes);
   // Future<Either> resetPassword(String email);
   // Future<Either> verifyEmail(String email);
   // Future<Either> sendEmailVerification(String email);

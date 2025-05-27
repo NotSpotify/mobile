@@ -25,7 +25,7 @@ class AuthRepositoryImpl extends AuthRepo {
     );
   }
 
-   @override
+  @override
   Future<Either> getUser() {
     return sl<AuthFirebaseService>().getUser();
   }
@@ -37,11 +37,11 @@ class AuthRepositoryImpl extends AuthRepo {
 
   @override
   Future<Either> signOut() {
-    throw UnimplementedError();
+    return sl<AuthFirebaseService>().signOut();
   }
-  
- 
 
-  
-  
+  @override
+  Future<Either> updateGerne(String userId, List<String> genres) {
+    return sl<AuthFirebaseService>().updateGerne(userId, genres);
+  }
 }

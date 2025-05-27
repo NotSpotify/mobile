@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notspotify/core/config/theme/app_colors.dart';
+import 'package:notspotify/core/routes/app_routes.dart';
 import 'package:notspotify/domain/usecases/auth/get_user.dart';
 import 'package:notspotify/service_locator.dart';
-import 'package:notspotify/presentation/auth/pages/sign_in.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -11,8 +11,9 @@ class ProfilePage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const SignInPage()),
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.signIn,
         (route) => false,
       );
     } catch (e) {
@@ -43,19 +44,7 @@ class ProfilePage extends StatelessWidget {
             }
 
             return Stack(
-              children: [
-                // Background Banner
-                Container(
-                  height: 250,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/images/profile_banner.jpg',
-                      ), // Placeholder banner
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+              children: [               
                 // Nội dung
                 SingleChildScrollView(
                   child: Column(
@@ -92,20 +81,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 30),
-                      _profileActionButton(
-                        icon: Icons.edit,
-                        title: 'Edit Profile',
-                        onTap: () {
-                          // TODO: Navigate to Edit Profile
-                        },
-                      ),
-                      _profileActionButton(
-                        icon: Icons.settings,
-                        title: 'Settings',
-                        onTap: () {
-                          // TODO: Navigate to Settings
-                        },
-                      ),
+                
                       _profileActionButton(
                         icon: Icons.logout,
                         title: 'Logout',

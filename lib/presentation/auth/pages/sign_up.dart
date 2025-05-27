@@ -30,7 +30,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       appBar: BasicAppBar(
         title: SvgPicture.asset(AppVectors.logo, height: 40, width: 40),
-      ), // 👈 AppBar ở đây
+      ), 
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: Column(

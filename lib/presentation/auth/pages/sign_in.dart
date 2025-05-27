@@ -5,11 +5,12 @@ import 'package:notspotify/common/widgets/button/basic_app_button.dart';
 import 'package:notspotify/common/widgets/input/basic_textfield.dart';
 import 'package:notspotify/core/config/assets/app_vectors.dart';
 import 'package:notspotify/core/config/theme/app_colors.dart';
+import 'package:notspotify/core/routes/app_routes.dart';
+import 'package:notspotify/core/utils/navigation_helper.dart';
 import 'package:notspotify/data/models/auth/signin_user_req.dart';
+import 'package:notspotify/domain/usecases/auth/get_user.dart';
 import 'package:notspotify/domain/usecases/auth/signin.dart';
 import 'package:notspotify/domain/usecases/auth/signin_google.dart';
-import 'package:notspotify/presentation/auth/pages/sign_up.dart';
-import 'package:notspotify/presentation/home/pages/home.dart';
 import 'package:notspotify/service_locator.dart';
 
 class SignInPage extends StatefulWidget {
@@ -31,7 +32,7 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       appBar: BasicAppBar(
         title: SvgPicture.asset(AppVectors.logo, height: 40, width: 40),
-      ), // 👈 Use your custom app bar here
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         child: Column(
@@ -79,7 +80,6 @@ class _SignInPageState extends State<SignInPage> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {},
-                child: Text('Forgot Password?'),
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black54,
                   textStyle: TextStyle(
@@ -87,6 +87,7 @@ class _SignInPageState extends State<SignInPage> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                child: Text('Forgot Password?'),
               ),
             ),
             BasicAppButton(
@@ -95,19 +96,26 @@ class _SignInPageState extends State<SignInPage> {
               onPressed: () async {
                 var result = await sl<SigninUseCase>().call(
                   params: SigninUserReq(
-                    email: _email.text,
-                    password: _password.text,
+                    email: _email.text.trim(),
+                    password: _password.text.trim(),
                   ),
                 );
+
                 result.fold(
                   (l) => _showSnackbar(context, l.toString(), Colors.red),
-                  (r) {
+                  (r) async {
                     _showSnackbar(context, r.toString(), Colors.green);
-                    print('Navigating to HomePage with context: $context');
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => HomePage()),
-                      (route) => false,
+
+                    final userResult = await sl<GetUserUseCase>().call();
+                    userResult.fold(
+                      (l) => _showSnackbar(context, l.toString(), Colors.red),
+                      (user) {
+                        final next =
+                            user.hasChosenGenre == true
+                                ? AppRoutes.home
+                                : AppRoutes.genre;
+                        navigateToAndReplaceAll(context, next);
+                      },
                     );
                   },
                 );
@@ -144,15 +152,23 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   onPressed: () async {
                     var result = await sl<SigninGoogleUseCase>().call();
+
                     result.fold(
                       (l) => _showSnackbar(context, l.toString(), Colors.red),
-                      (r) {
+                      (r) async {
                         _showSnackbar(context, r.toString(), Colors.green);
-                        print('Navigating to HomePage with context: $context');
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => HomePage()),
-                          (route) => false,
+
+                        final userResult = await sl<GetUserUseCase>().call();
+                        userResult.fold(
+                          (l) =>
+                              _showSnackbar(context, l.toString(), Colors.red),
+                          (user) {
+                            final next =
+                                user.hasChosenGenre == true
+                                    ? AppRoutes.home
+                                    : AppRoutes.genre;
+                            navigateToAndReplaceAll(context, next);
+                          },
                         );
                       },
                     );
@@ -185,10 +201,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignUpPage()),
-                    );
+                    Navigator.pushReplacementNamed(context, AppRoutes.signUp);
                   },
                   child: Text(
                     ' Sign Up',

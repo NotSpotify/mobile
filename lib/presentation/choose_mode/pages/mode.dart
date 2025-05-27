@@ -1,22 +1,18 @@
 import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notspotify/common/widgets/button/basic_app_button.dart';
 import 'package:notspotify/core/config/assets/app_images.dart';
 import 'package:notspotify/core/config/assets/app_vectors.dart';
-import 'package:notspotify/presentation/auth/pages/sign_in.dart';
+import 'package:notspotify/core/routes/app_routes.dart';
 import 'package:notspotify/presentation/choose_mode/bloc/theme_cubit.dart';
-import 'package:notspotify/presentation/home/pages/home.dart';
 
 class ChooseModePage extends StatelessWidget {
-  final _user = FirebaseAuth.instance.currentUser;
-  ChooseModePage({super.key});
+  const ChooseModePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print("User: $_user");
     return Scaffold(
       body: Stack(
         children: [
@@ -68,13 +64,9 @@ class ChooseModePage extends StatelessWidget {
                 BasicAppButton(
                   title: "Continue",
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.pushReplacementNamed(
                       context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) =>
-                                _user != null ? HomePage() : SignInPage(),
-                      ),
+                      AppRoutes.signIn,
                     );
                   },
                   height: 70,
@@ -106,7 +98,7 @@ class ChooseModePage extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: const Color(0xff30393C).withOpacity(0.5),
+                  color: const Color(0xff30393C).withValues(alpha: 128),
                   shape: BoxShape.circle,
                 ),
                 child: SvgPicture.asset(icon, fit: BoxFit.none),
