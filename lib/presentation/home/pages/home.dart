@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notspotify/common/widgets/appbar/basic_app_bar.dart';
-import 'package:notspotify/core/config/assets/app_vectors.dart';
 import 'package:notspotify/presentation/discovery/pages/discovery_tab.dart';
 import 'package:notspotify/presentation/favourite/pages/favourite.dart';
 import 'package:notspotify/presentation/profile/pages/profile.dart';
