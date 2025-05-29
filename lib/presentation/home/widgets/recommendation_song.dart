@@ -7,7 +7,7 @@ import 'package:notspotify/domain/usecases/song/add_to_favourite.dart';
 import 'package:notspotify/domain/usecases/song/remove_from_favourite.dart';
 import 'package:notspotify/presentation/home/bloc/now_playing_cubit.dart';
 import 'package:notspotify/presentation/home/bloc/play_status.dart';
-import 'package:notspotify/presentation/home/bloc/song_cubit.dart';
+import 'package:notspotify/presentation/discovery/bloc/song_cubit.dart';
 import 'package:notspotify/presentation/home/bloc/songs_state.dart';
 import 'package:notspotify/service_locator.dart';
 

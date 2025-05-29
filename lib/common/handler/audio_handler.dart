@@ -4,7 +4,7 @@ class AudioPlayerHandler {
   static final AudioPlayer _player = AudioPlayer();
 
   static Future<void> play(String url) async {
-    await _player.stop(); // Dừng bài trước đó
+    await _player.stop(); 
     await _player.play(UrlSource(url));
   }
 

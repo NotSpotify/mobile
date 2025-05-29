@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notspotify/core/config/assets/app_images.dart';
 import 'package:notspotify/core/config/assets/app_vectors.dart';
-import 'package:notspotify/presentation/home/bloc/song_cubit.dart';
-import 'package:notspotify/presentation/home/widgets/discovery_song.dart';
+import 'package:notspotify/domain/entities/playlist/playlist.dart';
+import 'package:notspotify/domain/usecases/user/fetch_playlist.dart';
+import 'package:notspotify/presentation/discovery/bloc/song_cubit.dart';
+import 'package:notspotify/presentation/home/widgets/gerne_playlist.dart';
+import 'package:notspotify/presentation/home/widgets/playlist_screen.dart';
 import 'package:notspotify/presentation/home/widgets/recommendation_song.dart';
+import 'package:notspotify/presentation/home/widgets/song_widget.dart';
+import 'package:notspotify/service_locator.dart';
 
 class DiscoveryTab extends StatefulWidget {
-  const DiscoveryTab({super.key});
+   final Function(Widget) onOpenPlaylist;
 
+  const DiscoveryTab({super.key, required this.onOpenPlaylist});
   @override
   State<DiscoveryTab> createState() => _DiscoveryTabState();
 }
@@ -16,6 +22,7 @@ class DiscoveryTab extends StatefulWidget {
 class _DiscoveryTabState extends State<DiscoveryTab> {
   final SongCubit _randomSongCubit = SongCubit();
   final SongCubit _recommendSongCubit = SongCubit();
+  final _fetchPlaylistUseCase = sl<FetchPlaylistUseCase>();
 
   @override
   void initState() {
@@ -37,6 +44,7 @@ class _DiscoveryTabState extends State<DiscoveryTab> {
       onRefresh: () async {
         await _randomSongCubit.getRandomSong();
         await _recommendSongCubit.recommend();
+        setState(() {}); // Refresh playlists too
       },
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -46,6 +54,36 @@ class _DiscoveryTabState extends State<DiscoveryTab> {
           children: [
             _topCard(),
             const SizedBox(height: 30),
+
+            FutureBuilder(
+              future: _fetchPlaylistUseCase.call(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                final result = snapshot.data;
+                if (result == null) return const SizedBox.shrink();
+
+                return result.fold(
+                  (error) => Text(
+                    "❌ $error",
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  (playlists) {
+                    final casted = playlists as List<PlaylistEntity>;
+                  return GenrePlaylist(
+                      playlists: casted,
+                      onTap: (playlist) {
+                        widget.onOpenPlaylist(
+                          PlaylistDetailScreen(playlist: playlist),
+                        );
+                      },
+                    );               },
+                );
+              },
+            ),
+
             const Text(
               "Discover New Songs",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

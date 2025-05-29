@@ -8,4 +8,5 @@ abstract class SongRepo {
   Future<Either> addRecently(SongEntity song);
   Future<Either> getRandom();
   Future<Either> searchSongs(String query);
+  Future<Either> generatePlaylist(List<String> genres);
 }

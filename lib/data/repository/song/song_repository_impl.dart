@@ -34,4 +34,9 @@ class SongRepositoryImpl extends SongRepo {
   Future<Either> addRecently(SongEntity song) {
     return sl<SongFirebaseService>().addRecently(song);
   }
+  
+  @override
+  Future<Either> generatePlaylist(List<String> genres) {
+    throw UnimplementedError();
+  }
 }

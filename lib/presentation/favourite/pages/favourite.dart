@@ -29,6 +29,7 @@ class _FavouritePageState extends State<FavouritePage> {
   Future<void> _loadFavourites() async {
     final userId = sl<AuthService>().getCurrentUserId();
     if (userId == null) {
+      if (!mounted) return;
       setState(() {
         _favourites = [];
         _isLoading = false;
@@ -46,12 +47,14 @@ class _FavouritePageState extends State<FavouritePage> {
 
       final favouriteSongs = snapshot.docs.map((doc) => doc.data()).toList();
 
+      if (!mounted) return;
       setState(() {
         _favourites = favouriteSongs;
         _isLoading = false;
       });
     } catch (e) {
       print('Error loading favourites: $e');
+      if (!mounted) return;
       setState(() {
         _favourites = [];
         _isLoading = false;

@@ -17,17 +17,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  Widget? _currentInnerPage;
 
-  final _pages = const [
-    DiscoveryTab(),
-    SearchPage(),
-    FavouritePage(),
-    ProfilePage(),
-  ];
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pages = [
+      DiscoveryTab(onOpenPlaylist: openPlaylistDetail),
+      const SearchPage(),
+      const FavouritePage(),
+      const ProfilePage(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _currentInnerPage = null; // reset về tab gốc khi chuyển tab
+    });
+  }
+
+  void openPlaylistDetail(Widget playlistDetailScreen) {
+    setState(() {
+      _currentInnerPage = playlistDetailScreen;
     });
   }
 
@@ -35,12 +50,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BasicAppBar(
-        hideBack: true,
-        title: SvgPicture.asset(AppVectors.logo, height: 40, width: 40),
+        hideBack: _currentInnerPage == null,
+        onBack: () {
+          setState(() => _currentInnerPage = null);
+        },
       ),
       body: Stack(
         children: [
-          _pages[_selectedIndex],
+          _currentInnerPage ?? _pages[_selectedIndex],
           const Align(alignment: Alignment.bottomCenter, child: MiniPlayer()),
         ],
       ),

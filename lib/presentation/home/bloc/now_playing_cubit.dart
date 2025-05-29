@@ -9,6 +9,6 @@ class NowPlayingCubit extends Cubit<SongEntity?> {
   }
 
   void stop() {
-    emit(null); // Khi muốn tắt mini player
+    emit(null); 
   }
 }

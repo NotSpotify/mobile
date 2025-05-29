@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:notspotify/common/helpers/is_dark_mode.dart';
-import 'package:notspotify/core/routes/app_routes.dart';
 
 class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
   final bool hideBack;
-  const BasicAppBar({super.key, this.hideBack = false, this.title});
+  final VoidCallback? onBack;
+
+  const BasicAppBar({
+    super.key,
+    this.hideBack = false,
+    this.title,
+    this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +20,12 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: true,
       title: title ?? const Text(''),
-      automaticallyImplyLeading: !hideBack,
+      automaticallyImplyLeading: false, // vì ta tự custom leading
       leading:
           hideBack
               ? null
               : IconButton(
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    AppRoutes
-                        .getStarted, // hoặc AppRoutes.home nếu bạn dùng route constant
-                    (route) => false,
-                  );
-                },
+                onPressed: onBack ?? () => Navigator.pop(context),
                 icon: Container(
                   height: 50,
                   width: 50,
@@ -48,6 +47,5 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

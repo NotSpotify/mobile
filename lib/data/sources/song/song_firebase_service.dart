@@ -11,10 +11,10 @@ import 'package:notspotify/service_locator.dart';
 abstract class SongFirebaseService {
   Future<Either> addSongToFavourite(SongEntity song);
   Future<Either> removeSongFromFavourite(SongEntity song);
-  Future<Either<String, List<SongEntity>>> recommend();
-  Future<Either<String, bool>> addRecently(SongEntity song);
-  Future<Either<String, List<SongEntity>>> getRandom();
-  Future<Either<String, List<SongEntity>>> searchSongs(String query);
+  Future<Either> recommend();
+  Future<Either> addRecently(SongEntity song);
+  Future<Either> getRandom();
+  Future<Either> searchSongs(String query);
 }
 
 class SongFirebaseServiceImpl extends SongFirebaseService {
