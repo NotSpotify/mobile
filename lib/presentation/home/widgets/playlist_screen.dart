@@ -4,7 +4,6 @@ import 'package:notspotify/domain/entities/playlist/playlist.dart';
 import 'package:notspotify/presentation/home/bloc/now_playing_cubit.dart';
 import 'package:notspotify/presentation/home/bloc/play_status.dart';
 import 'package:notspotify/common/handler/audio_handler.dart';
-import 'package:notspotify/common/widgets/appbar/basic_app_bar.dart';
 
 class PlaylistDetailScreen extends StatelessWidget {
   final PlaylistEntity playlist;
@@ -16,6 +15,7 @@ class PlaylistDetailScreen extends StatelessWidget {
     final songs = playlist.songs;
 
     return Scaffold(
+
       body: Container(
         color: Colors.white,
         child: ListView(
