@@ -3,10 +3,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notspotify/core/config/theme/app_colors.dart';
 import 'package:notspotify/core/routes/app_routes.dart';
 import 'package:notspotify/domain/usecases/auth/get_user.dart';
+import 'package:notspotify/presentation/profile/pages/edit_profile.dart';
 import 'package:notspotify/service_locator.dart';
+import 'package:dartz/dartz.dart' as dartz;
+import 'package:notspotify/domain/entities/auth/user.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late Future<dartz.Either<dynamic, dynamic>> _userFuture;
+  final getUserUseCase = sl<GetUserUseCase>();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() {
+    setState(() {
+      _userFuture = getUserUseCase.call();
+    });
+  }
 
   Future<void> _signOut(BuildContext context) async {
     try {
@@ -26,12 +49,11 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final getUserUseCase = sl<GetUserUseCase>();
     final primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
-      body: FutureBuilder(
-        future: getUserUseCase.call(),
+      body: FutureBuilder<dartz.Either<dynamic, dynamic>>(
+        future: _userFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -81,7 +103,23 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 30),
-                
+                      _profileActionButton(
+                        icon: Icons.edit,
+                        title: 'Edit Profile',
+                        onTap: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      EditProfilePage(user: user as UserEntity),
+                            ),
+                          );
+                          if (result == true) {
+                            _loadUserData();
+                          }
+                        },
+                      ),
                       _profileActionButton(
                         icon: Icons.logout,
                         title: 'Logout',
