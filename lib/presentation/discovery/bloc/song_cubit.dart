@@ -8,8 +8,10 @@ class SongCubit extends Cubit<RandomSongState> {
   SongCubit() : super(RandomSongLoading());
 
   Future<void> getRandomSong() async {
+    if (isClosed) return;
     emit(RandomSongLoading());
     final result = await sl<GetRandomSongUseCase>().call();
+    if (isClosed) return;
     result.fold(
       (error) => emit(RandomSongError(error)),
       (songs) => emit(RandomSongLoaded(songs)),
@@ -17,8 +19,10 @@ class SongCubit extends Cubit<RandomSongState> {
   }
 
   Future<void> recommend() async {
+    if (isClosed) return;
     emit(RandomSongLoading());
     final result = await sl<RecommendSongUseCase>().call();
+    if (isClosed) return;
     result.fold(
       (error) => emit(RandomSongError(error)),
       (suggestSongs) => emit(RandomSongLoaded(suggestSongs)),

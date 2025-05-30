@@ -35,7 +35,7 @@ Future<void> initDependencies() async {
   sl.registerSingleton<SongRepo>(SongRepositoryImpl());
   sl.registerSingleton<GetRandomSongUseCase>(GetRandomSongUseCase());
   sl.registerSingleton<RecommendSongUseCase>(RecommendSongUseCase());
-  sl.registerSingleton<AddRecentlyUseCase>(AddRecentlyUseCase());
+  sl.registerLazySingleton<AddRecentlyUseCase>(() => AddRecentlyUseCase());
   sl.registerSingleton<RemoveFromFavouriteUseCase>(
     RemoveFromFavouriteUseCase(),
   );

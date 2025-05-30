@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notspotify/domain/entities/playlist/playlist.dart';
+import 'package:notspotify/domain/usecases/song/add_recently.dart';
 import 'package:notspotify/presentation/home/bloc/now_playing_cubit.dart';
 import 'package:notspotify/presentation/home/bloc/play_status.dart';
 import 'package:notspotify/common/handler/audio_handler.dart';
+import 'package:notspotify/service_locator.dart';
 
 class PlaylistDetailScreen extends StatelessWidget {
   final PlaylistEntity playlist;
@@ -15,7 +17,6 @@ class PlaylistDetailScreen extends StatelessWidget {
     final songs = playlist.songs;
 
     return Scaffold(
-
       body: Container(
         color: Colors.white,
         child: ListView(
@@ -65,7 +66,10 @@ class PlaylistDetailScreen extends StatelessWidget {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton.icon(
-                onPressed: () {
+                onPressed: () async {
+                  await sl<AddRecentlyUseCase>().call(
+                    params: songs[0],
+                  );
                   if (songs.isNotEmpty && songs[0].preview.isNotEmpty) {
                     context.read<NowPlayingCubit>().setSong(songs[0]);
                     AudioPlayerHandler.play(songs[0].preview);
@@ -142,7 +146,9 @@ class PlaylistDetailScreen extends StatelessWidget {
                     Icons.play_circle_outline,
                     color: Colors.black,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    print(song);
+                    await sl<AddRecentlyUseCase>().call(params: {'song': song});
                     if (song.preview.isNotEmpty) {
                       context.read<NowPlayingCubit>().setSong(song);
                       AudioPlayerHandler.play(song.preview);
@@ -157,7 +163,9 @@ class PlaylistDetailScreen extends StatelessWidget {
                     }
                   },
                 ),
-                onTap: () {
+                onTap: ()  async {
+                    await sl<AddRecentlyUseCase>().call(params: {'song': song});
+
                   if (song.preview.isNotEmpty) {
                     context.read<NowPlayingCubit>().setSong(song);
                     AudioPlayerHandler.play(song.preview);
